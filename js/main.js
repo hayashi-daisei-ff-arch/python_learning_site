@@ -2,6 +2,7 @@ import { Lexer } from './lexer.js';
 import { Parser } from './parser.js';
 import { Interpreter } from './interpreter.js';
 import { UI } from './ui.js';
+import { JapaneseTranslator } from './japanese.js';
 
 const ui = new UI();
 let interpreter = null;
@@ -14,7 +15,14 @@ function resetInterpreter() {
 }
 
 function initInterpreter() {
-    const code = ui.getCode();
+    let code = ui.getCode();
+
+    // Check if Japanese mode is enabled
+    const japaneseMode = document.getElementById('japanese-mode').checked;
+    if (japaneseMode) {
+        code = JapaneseTranslator.translate(code);
+    }
+
     try {
         const lexer = new Lexer(code);
         const tokens = lexer.tokenize();
