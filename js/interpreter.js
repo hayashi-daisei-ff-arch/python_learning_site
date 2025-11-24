@@ -98,7 +98,16 @@ export class Interpreter {
                         return left + right;
                     case '-': return left - right;
                     case '*': return left * right;
-                    case '/': return left / right;
+                    case '/':
+                        if (right === 0) {
+                            throw new Error('ZeroDivisionError: 0で割ることはできません (division by zero)');
+                        }
+                        return left / right;
+                    case '%':
+                        if (right === 0) {
+                            throw new Error('ZeroDivisionError: 0で割った余りは計算できません (modulo by zero)');
+                        }
+                        return left % right;
                     case '==':
                         if (Array.isArray(left) && Array.isArray(right)) return JSON.stringify(left) === JSON.stringify(right);
                         return left === right;
