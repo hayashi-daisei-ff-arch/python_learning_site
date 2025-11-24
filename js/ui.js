@@ -81,15 +81,31 @@ export class UI {
         for (const [name, value] of Object.entries(variables)) {
             const item = document.createElement('div');
             item.className = 'variable-item';
-            // Format value for display (e.g. arrays)
+
+            // Determine type and format value for display
             let displayValue = value;
+            let dataType = '';
+
             if (Array.isArray(value)) {
                 displayValue = `[${value.join(', ')}]`;
+                dataType = 'リスト';
+            } else if (typeof value === 'number') {
+                dataType = '数値';
+            } else if (typeof value === 'string') {
+                displayValue = `"${value}"`;
+                dataType = '文字列';
+            } else if (typeof value === 'boolean') {
+                dataType = '真偽値';
             }
 
             item.innerHTML = `
-                <span class="variable-name">${name}</span>
-                <span class="variable-value">${displayValue}</span>
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <span class="variable-name">${name}</span>
+                    <div style="text-align: right;">
+                        <span class="variable-value">${displayValue}</span>
+                        <span class="variable-type" style="font-size: 0.75em; opacity: 0.6; margin-left: 8px;">(${dataType})</span>
+                    </div>
+                </div>
             `;
             this.variablesContent.appendChild(item);
         }
