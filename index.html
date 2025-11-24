@@ -1,29 +1,22 @@
 <!DOCTYPE html>
 <html lang="ja">
-
-<head>
+<head></head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; img-src 'self' data:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; img-src 'self' data:;">
     <title>Python Beginner Studio</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="style_modal.css">
+    <link rel="stylesheet" href="style_zenkaku.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
     <div class="app-container">
         <header class="app-header">
-            <div class="logo">Python Beginner Studio <span style="font-size: 0.7em; opacity: 0.7;">v2.4</span></div>
+            <div class="logo">Python Beginner Studio <span style="font-size: 0.7em; opacity: 0.7;">v2.5</span></div>
             <div class="controls-group">
-                <button id="visual-mode-btn" class="btn btn-secondary" style="margin-right: 15px;">
-                    <span class="icon">➕</span> コード追加
-                </button>
                 <select id="template-select" class="template-select">
                     <option value="" disabled selected>テンプレートを選択</option>
                     <option value="calc">計算</option>
@@ -32,11 +25,12 @@
                     <option value="for">繰り返し(For)</option>
                     <option value="list">リスト</option>
                     <option value="string">文字列</option>
+                    <option value="cast">型変換</option>
                 </select>
             </div>
             <div class="controls">
-                <button id="help-btn" class="btn btn-secondary" style="margin-right: 10px;"><span class="icon">?</span>
-                    使い方</button>
+                <button id="visual-mode-btn" class="btn btn-secondary" style="margin-right: 10px;"><span class="icon">➕</span> コード追加</button>
+                <button id="help-btn" class="btn btn-secondary" style="margin-right: 10px;"><span class="icon">?</span> 使い方</button>
                 <button id="run-btn" class="btn btn-primary"><span class="icon">▶</span> 実行</button>
                 <button id="step-btn" class="btn btn-secondary"><span class="icon">⤵</span> 1行実行</button>
                 <button id="reset-btn" class="btn btn-danger"><span class="icon">↺</span> リセット</button>
@@ -47,11 +41,14 @@
                 <div class="panel-header"><span>コードエディタ</span></div>
                 <div class="editor-container">
                     <div class="line-numbers" id="line-numbers">1</div>
-                    <textarea id="code-editor" spellcheck="false" placeholder="ここにPythonコードを書いてください...">a = 10
+                    <div class="editor-wrapper">
+                        <div id="code-backdrop" class="code-backdrop"></div>
+                        <textarea id="code-editor" spellcheck="false" placeholder="ここにPythonコードを書いてください...">a = 10
 b = 20
 print(a + b)
 if a < b:
     print("a is smaller")</textarea>
+                    </div>
                 </div>
                 <div class="feedback-panel" id="feedback-panel">
                     <div class="feedback-content" id="feedback-content">実行ボタンまたは1行実行ボタンを押してください。</div>
@@ -60,9 +57,7 @@ if a < b:
             <section class="visualization-section">
                 <div class="panel-container variables-panel">
                     <div class="panel-header"><span>変数</span></div>
-                    <div id="variables-content" class="panel-content">
-                        <div class="empty-state">変数はまだありません</div>
-                    </div>
+                    <div id="variables-content" class="panel-content"><div class="empty-state">変数はまだありません</div></div>
                 </div>
                 <div class="panel-container console-panel">
                     <div class="panel-header"><span>出力</span></div>
@@ -72,7 +67,6 @@ if a < b:
         </main>
     </div>
 
-    <!-- Visual Code Generator Modal -->
     <div id="visual-modal" class="modal" style="display: none;">
         <div class="modal-content">
             <h2>コードを追加</h2>
@@ -82,6 +76,7 @@ if a < b:
                     <option value="assign">変数に代入</option>
                     <option value="calc">計算</option>
                     <option value="print">表示</option>
+                    <option value="cast">型変換</option>
                     <option value="if">条件分岐</option>
                     <option value="loop">繰り返し</option>
                 </select>
@@ -94,69 +89,64 @@ if a < b:
         </div>
     </div>
 
-    <!-- Help Modal -->
     <div id="help-modal" class="modal" style="display: none;">
         <div class="modal-content" style="max-width: 700px; max-height: 80vh; overflow-y: auto;">
             <h2>使い方ガイド</h2>
             <div style="line-height: 1.8;">
                 <h3>📝 基本操作</h3>
                 <ul>
-                    <li><strong>実行</strong>: コード全体を一度に実行します</li>
-                    <li><strong>1行実行</strong>: コードを1行ずつ実行し、変数の変化を確認できます</li>
-                    <li><strong>リセット</strong>: 実行状態をリセットします</li>
+                    <li><strong>実行</strong>: コード全体を一度に実行</li>
+                    <li><strong>1行実行</strong>: 1行ずつ実行し変数の変化を確認</li>
+                    <li><strong>リセット</strong>: 実行状態をリセット</li>
+                    <li><strong>コード追加</strong>: フォームで簡単にコード生成</li>
                 </ul>
 
                 <h3>🔢 使える演算子</h3>
                 <ul>
-                    <li><code>+</code> 足し算 (例: 5 + 3 = 8)</li>
-                    <li><code>-</code> 引き算 (例: 10 - 4 = 6)</li>
-                    <li><code>*</code> 掛け算 (例: 3 * 4 = 12)</li>
-                    <li><code>/</code> 割り算 (例: 10 / 2 = 5)</li>
-                    <li><code>%</code> 余り (例: 10 % 3 = 1)</li>
-                    <li><code>==</code> 等しい (例: 5 == 5 は真)</li>
-                    <li><code>!=</code> 等しくない (例: 5 != 3 は真)</li>
-                    <li><code>&lt;</code> より小さい</li>
-                    <li><code>&gt;</code> より大きい</li>
-                    <li><code>&lt;=</code> 以下</li>
-                    <li><code>&gt;=</code> 以上</li>
+                    <li><code>+</code> 足し算, <code>-</code> 引き算, <code>*</code> 掛け算</li>
+                    <li><code>/</code> 割り算, <code>%</code> 余り</li>
+                    <li><code>==</code> 等しい, <code>!=</code> 等しくない</li>
+                    <li><code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code> 比較</li>
+                </ul>
+
+                <h3>🔄 型変換関数</h3>
+                <ul>
+                    <li><code>int(値)</code> - 整数に変換 (例: int(3.14) → 3)</li>
+                    <li><code>float(値)</code> - 小数に変換 (例: float(5) → 5.0)</li>
+                    <li><code>str(値)</code> - 文字列に変換 (例: str(123) → "123")</li>
                 </ul>
 
                 <h3>📦 使える機能</h3>
                 <ul>
                     <li><code>print(値)</code> - 値を表示</li>
-                    <li><code>変数 = 値</code> - 変数に値を代入</li>
+                    <li><code>変数 = 値</code> - 変数に代入</li>
                     <li><code>if 条件:</code> - 条件分岐</li>
                     <li><code>while 条件:</code> - 繰り返し</li>
-                    <li><code>for 変数 in リスト:</code> - リストの各要素を処理</li>
-                    <li><code>[1, 2, 3]</code> - リスト（配列）</li>
-                    <li><code>リスト[0]</code> - リストの要素にアクセス</li>
+                    <li><code>for 変数 in リスト:</code> - リスト処理</li>
+                    <li><code>[1, 2, 3]</code> - リスト, <code>リスト[0]</code> - 要素アクセス</li>
                 </ul>
 
                 <h3>💡 コード例</h3>
-                <pre style="background: #0f172a; padding: 15px; border-radius: 8px; overflow-x: auto;">
-# 変数と計算
-a = 10
-b = 3
-print(a + b)    # 13
-print(a % b)    # 1 (余り)
+                <pre style="background: #0f172a; padding: 15px; border-radius: 8px;">
+# 型変換
+x = 3.14
+y = int(x)      # 3 (整数)
+z = str(y)      # "3" (文字列)
+print(z)
 
-# 条件分岐
-if a > b:
-    print("aの方が大きい")
+# 計算と余り
+print(10 % 3)   # 1
 
 # リスト
-numbers = [1, 2, 3]
-print(numbers[0])  # 1
-
-# 繰り返し
-for n in numbers:
+nums = [1, 2, 3]
+for n in nums:
     print(n * 2)</pre>
 
                 <h3>⚠️ 注意事項</h3>
                 <ul>
                     <li>0で割ることはできません</li>
-                    <li>インデント（字下げ）は4つのスペースを使用してください</li>
-                    <li>文字列は " または ' で囲みます</li>
+                    <li>インデントは4つのスペース</li>
+                    <li>文字列は " または ' で囲む</li>
                 </ul>
             </div>
             <div class="modal-buttons">
@@ -167,5 +157,4 @@ for n in numbers:
 
     <script type="module" src="js/main.js"></script>
 </body>
-
 </html>
