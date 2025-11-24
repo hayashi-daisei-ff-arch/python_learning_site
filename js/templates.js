@@ -26,6 +26,6 @@ print("Loop finished")`,
     list: `fruits = ["apple", "banana"]
 print(fruits)
 numbers = [10, 20, 30]
-total = numbers[0] + numbers[1]
+total = numbers[0] + numbers[1] + numbers[2]
 print(total)`
 };
