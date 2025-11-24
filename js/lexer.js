@@ -28,7 +28,7 @@ export class Lexer {
                 this.tokens.push(this.readIdentifier());
             } else if (char === '"' || char === "'") {
                 this.tokens.push(this.readString(char));
-            } else if (['+', '-', '*', '/', '=', '<', '>', '(', ')', ':', '[', ']', ','].includes(char)) {
+            } else if (['+', '-', '*', '/', '=', '<', '>', '(', ')', ':', '[', ']', ',', '!'].includes(char)) {
                 this.tokens.push(this.readOperator());
             } else if (char === '#') {
                 this.skipComment();
@@ -118,10 +118,22 @@ export class Lexer {
 
     readOperator() {
         const char = this.input[this.pos++];
-        // Handle double char operators like ==, <=, >=
+        // Handle double char operators like ==, <=, >=, !=
         if (char === '=' && this.peek() === '=') {
             this.pos++;
             return { type: 'OPERATOR', value: '==', line: this.line };
+        }
+        if (char === '<' && this.peek() === '=') {
+            this.pos++;
+            return { type: 'OPERATOR', value: '<=', line: this.line };
+        }
+        if (char === '>' && this.peek() === '=') {
+            this.pos++;
+            return { type: 'OPERATOR', value: '>=', line: this.line };
+        }
+        if (char === '!' && this.peek() === '=') {
+            this.pos++;
+            return { type: 'OPERATOR', value: '!=', line: this.line };
         }
         return { type: 'OPERATOR', value: char, line: this.line };
     }
