@@ -20,6 +20,11 @@ export class Parser {
         if (this.match('KEYWORD', 'print')) {
             return this.printStatement();
         }
+        if (this.match('KEYWORD', 'int') || this.match('KEYWORD', 'float') || this.match('KEYWORD', 'str')) {
+            // Cast functions are handled as expressions
+            this.pos--; // Go back
+            return this.expressionStatement();
+        }
         if (this.match('KEYWORD', 'if')) {
             return this.ifStatement();
         }
@@ -161,6 +166,13 @@ export class Parser {
             expr = { type: 'Literal', value: this.previous().value };
         } else if (this.match('STRING')) {
             expr = { type: 'Literal', value: this.previous().value };
+        } else if (this.match('KEYWORD', 'int') || this.match('KEYWORD', 'float') || this.match('KEYWORD', 'str')) {
+            // Cast function call
+            const funcName = this.previous().value;
+            this.consume('OPERATOR', '(');
+            const argument = this.expression();
+            this.consume('OPERATOR', ')');
+            expr = { type: 'CastCall', function: funcName, argument };
         } else if (this.match('IDENTIFIER')) {
             expr = { type: 'Variable', name: this.previous().value };
         } else if (this.match('OPERATOR', '(')) {
