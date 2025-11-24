@@ -2,9 +2,10 @@ import { Lexer } from './lexer.js';
 import { Parser } from './parser.js';
 import { Interpreter } from './interpreter.js';
 import { UI } from './ui.js';
-import { JapaneseTranslator } from './japanese.js';
+import { VisualCodeGenerator } from './visual.js';
 
 const ui = new UI();
+const visualGen = new VisualCodeGenerator();
 let interpreter = null;
 
 function resetInterpreter() {
@@ -15,13 +16,7 @@ function resetInterpreter() {
 }
 
 function initInterpreter() {
-    let code = ui.getCode();
-
-    // Check if Japanese mode is enabled
-    const japaneseMode = document.getElementById('japanese-mode').checked;
-    if (japaneseMode) {
-        code = JapaneseTranslator.translate(code);
-    }
+    const code = ui.getCode();
 
     try {
         const lexer = new Lexer(code);
@@ -49,9 +44,7 @@ ui.onRun(() => {
     resetInterpreter();
     if (initInterpreter()) {
         ui.showFeedback("実行中...");
-        // Run until done
         let result = { done: false };
-        // Limit iterations to prevent infinite loops freezing browser
         let maxSteps = 1000;
         while (!result.done && maxSteps > 0) {
             result = interpreter.step();
@@ -76,17 +69,15 @@ ui.onStep(() => {
     const result = interpreter.step();
     if (result.done) {
         ui.clearHighlight();
-        // If it was an error, it's already printed
         if (!result.error) {
             ui.printToConsole("Execution finished");
             ui.showFeedback("実行が完了しました");
         } else {
             ui.showFeedback(`エラー: ${result.error.message}`, true);
         }
-        interpreter = null; // Reset for next run
+        interpreter = null;
     } else {
         ui.highlightLine(result.line);
-        // Feedback is now shown by the interpreter for each operation
     }
 });
 
