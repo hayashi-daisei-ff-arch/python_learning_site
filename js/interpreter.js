@@ -79,6 +79,16 @@ export class Interpreter {
                     throw new Error(`NameError: name '${expr.name}' is not defined`);
                 }
                 return this.variables[expr.name];
+            case 'IndexAccess':
+                const obj = this.evaluate(expr.object);
+                const index = this.evaluate(expr.index);
+                if (!Array.isArray(obj)) {
+                    throw new Error(`TypeError: object is not subscriptable`);
+                }
+                if (index < 0 || index >= obj.length) {
+                    throw new Error(`IndexError: list index out of range`);
+                }
+                return obj[index];
             case 'BinaryExpression':
                 const left = this.evaluate(expr.left);
                 const right = this.evaluate(expr.right);
