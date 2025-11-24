@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head></head>
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; img-src 'self' data:;">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; img-src 'self' data:;">
     <title>Python Beginner Studio</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="style_modal.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
     <div class="app-container">
         <header class="app-header">
-            <div class="logo">Python Beginner Studio <span style="font-size: 0.7em; opacity: 0.7;">v2.3</span></div>
+            <div class="logo">Python Beginner Studio <span style="font-size: 0.7em; opacity: 0.7;">v2.4</span></div>
             <div class="controls-group">
                 <button id="visual-mode-btn" class="btn btn-secondary" style="margin-right: 15px;">
                     <span class="icon">➕</span> コード追加
@@ -30,6 +35,8 @@
                 </select>
             </div>
             <div class="controls">
+                <button id="help-btn" class="btn btn-secondary" style="margin-right: 10px;"><span class="icon">?</span>
+                    使い方</button>
                 <button id="run-btn" class="btn btn-primary"><span class="icon">▶</span> 実行</button>
                 <button id="step-btn" class="btn btn-secondary"><span class="icon">⤵</span> 1行実行</button>
                 <button id="reset-btn" class="btn btn-danger"><span class="icon">↺</span> リセット</button>
@@ -87,6 +94,78 @@ if a < b:
         </div>
     </div>
 
+    <!-- Help Modal -->
+    <div id="help-modal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 700px; max-height: 80vh; overflow-y: auto;">
+            <h2>使い方ガイド</h2>
+            <div style="line-height: 1.8;">
+                <h3>📝 基本操作</h3>
+                <ul>
+                    <li><strong>実行</strong>: コード全体を一度に実行します</li>
+                    <li><strong>1行実行</strong>: コードを1行ずつ実行し、変数の変化を確認できます</li>
+                    <li><strong>リセット</strong>: 実行状態をリセットします</li>
+                </ul>
+
+                <h3>🔢 使える演算子</h3>
+                <ul>
+                    <li><code>+</code> 足し算 (例: 5 + 3 = 8)</li>
+                    <li><code>-</code> 引き算 (例: 10 - 4 = 6)</li>
+                    <li><code>*</code> 掛け算 (例: 3 * 4 = 12)</li>
+                    <li><code>/</code> 割り算 (例: 10 / 2 = 5)</li>
+                    <li><code>%</code> 余り (例: 10 % 3 = 1)</li>
+                    <li><code>==</code> 等しい (例: 5 == 5 は真)</li>
+                    <li><code>!=</code> 等しくない (例: 5 != 3 は真)</li>
+                    <li><code>&lt;</code> より小さい</li>
+                    <li><code>&gt;</code> より大きい</li>
+                    <li><code>&lt;=</code> 以下</li>
+                    <li><code>&gt;=</code> 以上</li>
+                </ul>
+
+                <h3>📦 使える機能</h3>
+                <ul>
+                    <li><code>print(値)</code> - 値を表示</li>
+                    <li><code>変数 = 値</code> - 変数に値を代入</li>
+                    <li><code>if 条件:</code> - 条件分岐</li>
+                    <li><code>while 条件:</code> - 繰り返し</li>
+                    <li><code>for 変数 in リスト:</code> - リストの各要素を処理</li>
+                    <li><code>[1, 2, 3]</code> - リスト（配列）</li>
+                    <li><code>リスト[0]</code> - リストの要素にアクセス</li>
+                </ul>
+
+                <h3>💡 コード例</h3>
+                <pre style="background: #0f172a; padding: 15px; border-radius: 8px; overflow-x: auto;">
+# 変数と計算
+a = 10
+b = 3
+print(a + b)    # 13
+print(a % b)    # 1 (余り)
+
+# 条件分岐
+if a > b:
+    print("aの方が大きい")
+
+# リスト
+numbers = [1, 2, 3]
+print(numbers[0])  # 1
+
+# 繰り返し
+for n in numbers:
+    print(n * 2)</pre>
+
+                <h3>⚠️ 注意事項</h3>
+                <ul>
+                    <li>0で割ることはできません</li>
+                    <li>インデント（字下げ）は4つのスペースを使用してください</li>
+                    <li>文字列は " または ' で囲みます</li>
+                </ul>
+            </div>
+            <div class="modal-buttons">
+                <button id="help-close-btn" class="btn btn-primary">閉じる</button>
+            </div>
+        </div>
+    </div>
+
     <script type="module" src="js/main.js"></script>
 </body>
+
 </html>
