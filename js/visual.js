@@ -73,6 +73,26 @@ export class VisualCodeGenerator {
                     </div>
                 `;
                 break;
+            case 'cast':
+                html = `
+                    <div class="form-group">
+                        <label>変換の種類:</label>
+                        <select id="cast-type">
+                            <option value="int">整数にする (int)</option>
+                            <option value="float">小数にする (float)</option>
+                            <option value="str">文字列にする (str)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>変換する値:</label>
+                        <input type="text" id="cast-value" placeholder="例: 3.14 または \"123\"">
+                    </div>
+                    <div class="form-group">
+                        <label>結果を入れる変数:</label>
+                        <input type="text" id="cast-result-var" placeholder="例: num">
+                    </div>
+                `;
+                break;
             case 'if':
                 html = `
                     <div class="form-group">
@@ -127,6 +147,12 @@ export class VisualCodeGenerator {
             case 'print':
                 const printValue = document.getElementById('print-value').value;
                 code = `print(${printValue})`;
+                break;
+            case 'cast':
+                const castType = document.getElementById('cast-type').value;
+                const castValue = document.getElementById('cast-value').value;
+                const castResultVar = document.getElementById('cast-result-var').value;
+                code = `${castResultVar} = ${castType}(${castValue})`;
                 break;
             case 'if':
                 const condition = document.getElementById('condition').value;
