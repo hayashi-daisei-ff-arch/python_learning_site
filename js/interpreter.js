@@ -102,8 +102,13 @@ export class Interpreter {
                     case '==':
                         if (Array.isArray(left) && Array.isArray(right)) return JSON.stringify(left) === JSON.stringify(right);
                         return left === right;
+                    case '!=':
+                        if (Array.isArray(left) && Array.isArray(right)) return JSON.stringify(left) !== JSON.stringify(right);
+                        return left !== right;
                     case '<': return left < right;
                     case '>': return left > right;
+                    case '<=': return left <= right;
+                    case '>=': return left >= right;
                 }
                 break;
         }
