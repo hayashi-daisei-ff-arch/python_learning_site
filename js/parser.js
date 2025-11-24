@@ -152,8 +152,6 @@ export class Parser {
         return { type: 'ForStatement', iterator, iterable, body, line: token.line };
     }
 
-    // ... (existing methods)
-
     primary() {
         if (this.match('NUMBER')) return { type: 'Literal', value: this.previous().value };
         if (this.match('STRING')) return { type: 'Literal', value: this.previous().value };
