@@ -39,7 +39,95 @@ export class Parser {
         return this.expressionStatement();
     }
 
-    // ... (existing methods)
+    printStatement() {
+        const token = this.previous();
+        this.consume('OPERATOR', '(');
+        const expr = this.expression();
+        this.consume('OPERATOR', ')');
+        return { type: 'PrintStatement', expression: expr, line: token.line };
+    }
+
+    assignmentStatement() {
+        const nameToken = this.previous();
+        this.consume('OPERATOR', '=');
+        const value = this.expression();
+        return { type: 'AssignmentStatement', name: nameToken.value, value, line: nameToken.line };
+    }
+
+    ifStatement() {
+        const token = this.previous();
+        const condition = this.expression();
+        this.consume('OPERATOR', ':');
+        this.consume('INDENT');
+        const body = [];
+        while (!this.check('DEDENT') && !this.isAtEnd()) {
+            body.push(this.statement());
+        }
+        this.consume('DEDENT');
+        return { type: 'IfStatement', condition, body, line: token.line };
+    }
+
+    whileStatement() {
+        const token = this.previous();
+        const condition = this.expression();
+        this.consume('OPERATOR', ':');
+        this.consume('INDENT');
+        const body = [];
+        while (!this.check('DEDENT') && !this.isAtEnd()) {
+            body.push(this.statement());
+        }
+        this.consume('DEDENT');
+        return { type: 'WhileStatement', condition, body, line: token.line };
+    }
+
+    expressionStatement() {
+        const expr = this.expression();
+        const line = this.previous() ? this.previous().line : 0;
+        return { type: 'ExpressionStatement', expression: expr, line };
+    }
+
+    expression() {
+        return this.equality();
+    }
+
+    equality() {
+        let expr = this.comparison();
+        while (this.match('OPERATOR', '==')) {
+            const right = this.comparison();
+            expr = { type: 'BinaryExpression', left: expr, operator: '==', right };
+        }
+        return expr;
+    }
+
+    comparison() {
+        let expr = this.term();
+        while (this.match('OPERATOR', '<') || this.match('OPERATOR', '>')) {
+            const operator = this.previous().value;
+            const right = this.term();
+            expr = { type: 'BinaryExpression', left: expr, operator, right };
+        }
+        return expr;
+    }
+
+    term() {
+        let expr = this.factor();
+        while (this.match('OPERATOR', '+') || this.match('OPERATOR', '-')) {
+            const operator = this.previous().value;
+            const right = this.factor();
+            expr = { type: 'BinaryExpression', left: expr, operator, right };
+        }
+        return expr;
+    }
+
+    factor() {
+        let expr = this.primary();
+        while (this.match('OPERATOR', '*') || this.match('OPERATOR', '/')) {
+            const operator = this.previous().value;
+            const right = this.primary();
+            expr = { type: 'BinaryExpression', left: expr, operator, right };
+        }
+        return expr;
+    }
 
     forStatement() {
         const token = this.previous();
