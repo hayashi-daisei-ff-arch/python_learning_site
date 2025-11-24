@@ -123,7 +123,7 @@ export class Parser {
 
     factor() {
         let expr = this.primary();
-        while (this.match('OPERATOR', '*') || this.match('OPERATOR', '/')) {
+        while (this.match('OPERATOR', '*') || this.match('OPERATOR', '/') || this.match('OPERATOR', '%')) {
             const operator = this.previous().value;
             const right = this.primary();
             expr = { type: 'BinaryExpression', left: expr, operator, right };
