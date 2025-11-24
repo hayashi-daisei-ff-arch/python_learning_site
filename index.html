@@ -18,7 +18,7 @@
 <body>
     <div class="app-container">
         <header class="app-header">
-            <div class="logo">Python Beginner Studio</div>
+            <div class="logo">Python Beginner Studio <span style="font-size: 0.7em; opacity: 0.7;">v2.1</span></div>
             <div class="controls-group">
                 <select id="template-select" class="template-select">
                     <option value="" disabled selected>テンプレートを選択 (Select Template)</option>
@@ -49,13 +49,11 @@
                 </div>
                 <div class="editor-container">
                     <div class="line-numbers" id="line-numbers">1</div>
-                    <textarea id="code-editor" spellcheck="false" placeholder="ここにPythonコードを書いてください...">
-a = 10
+                    <textarea id="code-editor" spellcheck="false" placeholder="ここにPythonコードを書いてください...">a = 10
 b = 20
 print(a + b)
 if a < b:
-    print("a is smaller")
-</textarea>
+    print("a is smaller")</textarea>
                 </div>
                 <div class="feedback-panel" id="feedback-panel">
                     <div class="feedback-content" id="feedback-content">
