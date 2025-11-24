@@ -34,5 +34,15 @@ greeting = "こんにちは"
 message = greeting + name
 print(message)
 age = 20
-print(age)`
+print(age)`,
+
+    cast: `x = 3.14
+print(x)
+y = int(x)
+print(y)
+z = str(y)
+print(z)
+text = "123"
+num = int(text)
+print(num + 10)`
 };
