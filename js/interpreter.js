@@ -3,10 +3,11 @@
  * Executes the AST step-by-step using Generators.
  */
 export class Interpreter {
-    constructor(ast, outputCallback, updateVariablesCallback) {
+    constructor(ast, outputCallback, updateVariablesCallback, feedbackCallback) {
         this.ast = ast;
         this.outputCallback = outputCallback;
         this.updateVariablesCallback = updateVariablesCallback;
+        this.feedbackCallback = feedbackCallback || (() => { });
         this.variables = {};
         this.generator = this.createGenerator();
         this.currentLine = 0;
@@ -27,9 +28,13 @@ export class Interpreter {
             case 'PrintStatement':
                 const value = this.evaluate(stmt.expression);
                 this.outputCallback(value);
+                this.feedbackCallback(`画面に「${value}」を表示しました`);
                 break;
             case 'AssignmentStatement':
-                this.variables[stmt.name] = this.evaluate(stmt.value);
+                const assignValue = this.evaluate(stmt.value);
+                this.variables[stmt.name] = assignValue;
+                const displayValue = Array.isArray(assignValue) ? `[${assignValue.join(', ')}]` : assignValue;
+                this.feedbackCallback(`変数「${stmt.name}」に ${displayValue} を代入しました`);
                 break;
             case 'IfStatement':
                 if (this.evaluate(stmt.condition)) {
