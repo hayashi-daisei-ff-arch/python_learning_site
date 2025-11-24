@@ -25,7 +25,8 @@ function initInterpreter() {
         interpreter = new Interpreter(
             ast,
             (output) => ui.printToConsole(output),
-            (vars) => ui.updateVariables(vars)
+            (vars) => ui.updateVariables(vars),
+            (message) => ui.showFeedback(message, false)
         );
 
         return true;
@@ -77,7 +78,7 @@ ui.onStep(() => {
         interpreter = null; // Reset for next run
     } else {
         ui.highlightLine(result.line);
-        ui.showFeedback(`${result.line}行目を実行する準備ができました`);
+        // Feedback is now shown by the interpreter for each operation
     }
 });
 
