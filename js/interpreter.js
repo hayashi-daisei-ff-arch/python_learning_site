@@ -89,6 +89,19 @@ export class Interpreter {
                     throw new Error(`IndexError: list index out of range`);
                 }
                 return obj[index];
+            case 'CastCall':
+                const arg = this.evaluate(expr.argument);
+                switch (expr.function) {
+                    case 'int':
+                        if (isNaN(Number(arg))) throw new Error(`ValueError: invalid literal for int(): '${arg}'`);
+                        return Math.floor(Number(arg));
+                    case 'float':
+                        if (isNaN(Number(arg))) throw new Error(`ValueError: could not convert string to float: '${arg}'`);
+                        return Number(arg);
+                    case 'str':
+                        return String(arg);
+                }
+                break;
             case 'BinaryExpression':
                 const left = this.evaluate(expr.left);
                 const right = this.evaluate(expr.right);
