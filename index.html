@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Beginner Studio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="logo">Python Beginner Studio</div>
+            <div class="controls-group">
+                <select id="template-select" class="template-select">
+                    <option value="" disabled selected>テンプレートを選択 (Select Template)</option>
+                    <option value="calc">計算 (Calculation)</option>
+                    <option value="if">条件分岐 (If Statement)</option>
+                    <option value="while">繰り返し (While Loop)</option>
+                    <option value="for">繰り返し (For Loop)</option>
+                    <option value="list">リスト (List/Array)</option>
+                </select>
+            </div>
+            <div class="controls">
+                <button id="run-btn" class="btn btn-primary">
+                    <span class="icon">▶</span> 実行 (Run)
+                </button>
+                <button id="step-btn" class="btn btn-secondary">
+                    <span class="icon">⤵</span> 1行実行 (Step)
+                </button>
+                <button id="reset-btn" class="btn btn-danger">
+                    <span class="icon">↺</span> リセット (Reset)
+                </button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <section class="editor-section">
+                <div class="panel-header">
+                    <span>コードエディタ (Code Editor)</span>
+                </div>
+                <div class="editor-container">
+                    <div class="line-numbers" id="line-numbers">1</div>
+                    <textarea id="code-editor" spellcheck="false" placeholder="ここにPythonコードを書いてください...">
+a = 10
+b = 20
+print(a + b)
+if a < b:
+    print("a is smaller")
+</textarea>
+                </div>
+                <div class="feedback-panel" id="feedback-panel">
+                    <div class="feedback-content" id="feedback-content">
+                        実行ボタンまたは1行実行ボタンを押してください。
+                    </div>
+                </div>
+            </section>
+
+            <section class="visualization-section">
+                <div class="panel-container variables-panel">
+                    <div class="panel-header">
+                        <span>変数 (Variables)</span>
+                    </div>
+                    <div id="variables-content" class="panel-content">
+                        <div class="empty-state">変数はまだありません</div>
+                    </div>
+                </div>
+
+                <div class="panel-container console-panel">
+                    <div class="panel-header">
+                        <span>出力 (Console)</span>
+                    </div>
+                    <div id="console-output" class="panel-content"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+
+</html>
