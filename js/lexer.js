@@ -90,7 +90,14 @@ export class Lexer {
         while (/[0-9]/.test(this.peek())) {
             this.pos++;
         }
-        return { type: 'NUMBER', value: parseInt(this.input.substring(start, this.pos)), line: this.line };
+        // Handle decimal point
+        if (this.peek() === '.') {
+            this.pos++;
+            while (/[0-9]/.test(this.peek())) {
+                this.pos++;
+            }
+        }
+        return { type: 'NUMBER', value: Number(this.input.substring(start, this.pos)), line: this.line };
     }
 
     readIdentifier() {
