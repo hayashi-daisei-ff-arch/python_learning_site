@@ -1,41 +1,67 @@
-/* Zenkaku Highlight Styles */
+/* Zenkaku Highlight Styles & Layout Fixes */
+
+/* Wrapper occupies remaining space next to line numbers */
 .editor-wrapper {
     position: relative;
-    flex-grow: 1;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     height: 100%;
     overflow: hidden;
+    background-color: var(--bg-editor);
 }
 
-.code-backdrop {
+/* Backdrop and Textarea must overlap perfectly */
+.code-backdrop,
+#code-editor {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    padding: 15px;
+    padding: 10px;
+    /* Match style.css padding */
+    margin: 0;
+    border: none;
     font-family: var(--font-mono);
+    /* Explicitly match font */
     font-size: 14px;
     line-height: 1.5;
     white-space: pre;
     overflow: auto;
-    pointer-events: none;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+.code-backdrop {
     z-index: 0;
     color: transparent;
-    /* 文字自体は透明にして背景色だけ見せる */
     background-color: transparent;
+    pointer-events: none;
 }
 
-/* Ensure textarea matches backdrop exactly */
 #code-editor {
-    position: relative;
     z-index: 1;
     background-color: transparent;
-    /* 背景を透明にしてbackdropを見せる */
+    color: var(--text-primary);
+    resize: none;
+    outline: none;
 }
 
+/* Zenkaku Highlight Span */
 .zenkaku-highlight {
     background-color: rgba(255, 0, 0, 0.3);
-    /* 赤くハイライト */
     border-radius: 2px;
     outline: 1px solid rgba(255, 0, 0, 0.5);
+    min-width: 1em;
+    /* Ensure spaces are visible */
+    display: inline-block;
+    /* Allow width/height to apply if needed */
+}
+
+/* Wider Button for Visual Mode */
+#visual-mode-btn {
+    min-width: 160px;
+    /* Increased width as requested */
+    justify-content: center;
 }
