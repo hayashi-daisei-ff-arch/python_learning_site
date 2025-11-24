@@ -27,5 +27,12 @@ print("Loop finished")`,
 print(fruits)
 numbers = [10, 20, 30]
 total = numbers[0] + numbers[1] + numbers[2]
-print(total)`
+print(total)`,
+
+    string: `name = "太郎"
+greeting = "こんにちは"
+message = greeting + name
+print(message)
+age = 20
+print(age)`
 };
