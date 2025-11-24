@@ -153,18 +153,31 @@ export class Parser {
     }
 
     primary() {
-        if (this.match('NUMBER')) return { type: 'Literal', value: this.previous().value };
-        if (this.match('STRING')) return { type: 'Literal', value: this.previous().value };
-        if (this.match('IDENTIFIER')) return { type: 'Variable', name: this.previous().value };
-        if (this.match('OPERATOR', '(')) {
-            const expr = this.expression();
+        let expr;
+
+        if (this.match('NUMBER')) {
+            expr = { type: 'Literal', value: this.previous().value };
+        } else if (this.match('STRING')) {
+            expr = { type: 'Literal', value: this.previous().value };
+        } else if (this.match('IDENTIFIER')) {
+            expr = { type: 'Variable', name: this.previous().value };
+        } else if (this.match('OPERATOR', '(')) {
+            expr = this.expression();
             this.consume('OPERATOR', ')');
-            return expr;
+        } else if (this.match('OPERATOR', '[')) {
+            expr = this.listDisplay();
+        } else {
+            throw new Error(`Parse Error: Unexpected token ${JSON.stringify(this.peek())}`);
         }
-        if (this.match('OPERATOR', '[')) {
-            return this.listDisplay();
+
+        // Handle array indexing: arr[0]
+        while (this.match('OPERATOR', '[')) {
+            const index = this.expression();
+            this.consume('OPERATOR', ']');
+            expr = { type: 'IndexAccess', object: expr, index };
         }
-        throw new Error(`Parse Error: Unexpected token ${JSON.stringify(this.peek())}`);
+
+        return expr;
     }
 
     listDisplay() {
