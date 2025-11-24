@@ -79,7 +79,8 @@ export class UI {
         // Replace zenkaku space and zenkaku alphanumeric with highlighted spans
         // Zenkaku Space: \u3000
         // Zenkaku Alphanumeric: \uFF01-\uFF5E
-        let html = text.replace(/([\u3000\uFF01-\uFF5E]+)/g, '<span class="zenkaku-highlight">$1</span>');
+        // Zenkaku Quotes: \u2019 (Right Single Quote), \u201D (Right Double Quote)
+        let html = text.replace(/([\u3000\uFF01-\uFF5E\u2019\u201D]+)/g, '<span class="zenkaku-highlight">$1</span>');
 
         // Handle trailing newline for correct height
         if (text.endsWith('\n')) {
