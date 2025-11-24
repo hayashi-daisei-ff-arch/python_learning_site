@@ -3,6 +3,7 @@ import { Parser } from './parser.js';
 import { Interpreter } from './interpreter.js';
 import { UI } from './ui.js';
 import { VisualCodeGenerator } from './visual.js';
+import { ErrorTranslator } from './errorTranslator.js';
 
 const ui = new UI();
 const visualGen = new VisualCodeGenerator();
@@ -34,8 +35,9 @@ function initInterpreter() {
 
         return true;
     } catch (e) {
-        ui.printToConsole(`Error: ${e.message}`);
-        ui.showFeedback(`エラーが発生しました: ${e.message}`, true);
+        const translatedError = ErrorTranslator.formatError(e);
+        ui.printToConsole(`Error: ${translatedError}`);
+        ui.showFeedback(`エラーが発生しました: ${translatedError}`, true);
         return false;
     }
 }
@@ -73,7 +75,8 @@ ui.onStep(() => {
             ui.printToConsole("Execution finished");
             ui.showFeedback("実行が完了しました");
         } else {
-            ui.showFeedback(`エラー: ${result.error.message}`, true);
+            const translatedError = ErrorTranslator.formatError(result.error);
+            ui.showFeedback(`エラー: ${translatedError}`, true);
         }
         interpreter = null;
     } else {
@@ -86,3 +89,23 @@ ui.onReset(() => {
     ui.printToConsole("Reset complete");
     ui.showFeedback("リセットしました");
 });
+
+// Help modal
+const helpBtn = document.getElementById('help-btn');
+const helpModal = document.getElementById('help-modal');
+const helpCloseBtn = document.getElementById('help-close-btn');
+
+helpBtn.addEventListener('click', () => {
+    helpModal.style.display = 'flex';
+});
+
+helpCloseBtn.addEventListener('click', () => {
+    helpModal.style.display = 'none';
+});
+
+helpModal.addEventListener('click', (e) => {
+    if (e.target === helpModal) {
+        helpModal.style.display = 'none';
+    }
+});
+
