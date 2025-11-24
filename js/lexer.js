@@ -28,7 +28,7 @@ export class Lexer {
                 this.tokens.push(this.readIdentifier());
             } else if (char === '"' || char === "'") {
                 this.tokens.push(this.readString(char));
-            } else if (['+', '-', '*', '/', '=', '<', '>', '(', ')', ':', '[', ']', ',', '!'].includes(char)) {
+            } else if (['+', '-', '*', '/', '%', '=', '<', '>', '(', ')', ':', '[', ']', ',', '!'].includes(char)) {
                 this.tokens.push(this.readOperator());
             } else if (char === '#') {
                 this.skipComment();
