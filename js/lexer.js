@@ -99,7 +99,7 @@ export class Lexer {
             this.pos++;
         }
         const value = this.input.substring(start, this.pos);
-        const keywords = ['if', 'else', 'while', 'for', 'print', 'in'];
+        const keywords = ['if', 'else', 'while', 'for', 'print', 'in', 'int', 'float', 'str'];
         const type = keywords.includes(value) ? 'KEYWORD' : 'IDENTIFIER';
         return { type, value, line: this.line };
     }
